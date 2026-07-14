@@ -233,16 +233,10 @@ const CHAIN_ID = 8453;
 const SCAN = 'https://basescan.org';
 const APP_URL = 'https://base-sub.vercel.app';
 
-/* ===== ERC-8021 Builder Code (base.dev → Settings → Builder Code) ===== */
-const BUILDER_CODE = ''; // ← base.dev'den aldığın kodu yaz (örn 'basesub'); boşsa suffix eklenmez
-function buildSuffix(){
-  if (!BUILDER_CODE) return '';
-  const codeHex = Array.from(new TextEncoder().encode(BUILDER_CODE)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  const len = (codeHex.length/2).toString(16).padStart(2,'0');
-  return len + codeHex + '00' + '80218021802180218021802180218021';
-}
-const SUFFIX = buildSuffix();
-const withCode = data => SUFFIX ? data + SUFFIX : data;
+/* ===== ERC-8021 Builder Code (base.dev → Settings → Builder Codes) ===== */
+// Code: bc_xony8ulb — encoded string from base.dev (codes + len + schemaId + 8021 marker)
+const SUFFIX = '62635f786f6e7938756c620b0080218021802180218021802180218021';
+const withCode = data => data + SUFFIX;
 
 const SUB_ABI = [
   'function subscribe(address merchant, uint96 amount, uint32 interval, string label) returns (uint256)',
