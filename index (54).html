@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BaseSub — subscriptions that collect themselves, on Base</title>
+<meta name="description" content="Non-custodial USDC subscriptions on Base. Approve once, an autonomous agent pulls each period when due. No custody, no lockups, cancel anytime."/>
+<meta property="og:title" content="BaseSub — subscriptions that collect themselves"/>
+<meta property="og:description" content="Non-custodial USDC subscriptions on Base mainnet. Share a subscribe-link, get paid every period — automatically."/>
+<meta property="og:image" content="https://base-sub.vercel.app/og.png"/>
+<!-- Farcaster / Base mini app embed -->
+<meta name="fc:miniapp" content='{"version":"1","imageUrl":"https://base-sub.vercel.app/og.png","button":{"title":"🔁 Open BaseSub","action":{"type":"launch_miniapp","name":"BaseSub","url":"https://base-sub.vercel.app"}}}'/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080d;--bg2:#0e1017;--bg3:#141722;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#eef1f8;--muted:#7d84a0;--dim:#3c4258;
+  --accent:#0052ff;--accent2:#3d7bff;--accent-glow:rgba(0,82,255,0.22);
+  --green:#1de9b6;--green-bg:rgba(29,233,182,0.08);--green-border:rgba(29,233,182,0.25);
+  --amber:#ffc107;--amber-bg:rgba(255,193,7,0.08);
+  --red:#ff5252;--red-bg:rgba(255,82,82,0.08);
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{background:var(--bg);color:var(--text);font-family:var(--font);}
+body{min-height:100vh;display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+.wrap{width:min(860px,92vw);margin:0 auto;position:relative;z-index:1;}
+header{padding:20px 0;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(7,8,13,0.88);backdrop-filter:blur(20px);z-index:100;}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.logo{font-weight:800;font-size:20px;letter-spacing:-0.5px;}
+.logo em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hright{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pill{font-family:var(--mono);font-size:11.5px;padding:6px 12px;border:0.5px solid var(--border2);border-radius:99px;color:var(--muted);}
+.pill.gas{color:var(--green);border-color:var(--green-border);}
+.connect-btn{font-family:var(--font);font-weight:700;font-size:13px;padding:9px 16px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;transition:all .2s;}
+.connect-btn:hover{border-color:var(--accent);box-shadow:0 0 18px var(--accent-glow);}
+.connect-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;}
+.connect-btn:disabled{opacity:0.5;cursor:wait;}
+.hero{padding:42px 0 10px;}
+.hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.08;letter-spacing:-1px;}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero p{color:var(--muted);font-size:14.5px;margin-top:12px;max-width:560px;line-height:1.6;}
+.tabs{display:flex;gap:4px;margin:28px 0 18px;border:0.5px solid var(--border);border-radius:14px;padding:4px;background:var(--bg2);width:fit-content;max-width:100%;overflow-x:auto;}
+.tab-btn{font-family:var(--font);font-weight:700;font-size:13px;padding:9px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .2s;}
+.tab-btn.active{background:var(--bg3);color:var(--text);box-shadow:inset 0 0 0 0.5px var(--border2);}
+.section{display:none;padding-bottom:50px;}
+.section.active{display:block;animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;}
+.card h2{font-size:16px;font-weight:700;margin-bottom:14px;}
+label{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 6px;}
+input,textarea{width:100%;font-family:var(--mono);font-size:14px;padding:12px 14px;border-radius:10px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text);outline:none;transition:border .2s;}
+input:focus,textarea:focus{border-color:var(--accent);}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.hint{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px;line-height:1.6;}
+.status{font-family:var(--mono);font-size:12px;margin-top:12px;color:var(--muted);min-height:16px;word-break:break-all;}
+.status.ok{color:var(--green);}
+.status.err{color:var(--red);}
+.status a{color:var(--accent2);}
+.receipt{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:4px;padding:18px 20px;font-family:var(--mono);font-size:12.5px;position:relative;margin-top:14px;}
+.receipt::before,.receipt::after{content:'';position:absolute;left:0;right:0;height:8px;background-image:radial-gradient(circle at 8px 0px, var(--bg) 5px, transparent 5px);background-size:16px 8px;}
+.receipt::before{top:-1px;}
+.receipt::after{bottom:-1px;transform:rotate(180deg);}
+.empty{font-family:var(--mono);font-size:12.5px;color:var(--dim);padding:18px 0;text-align:center;}
+footer{margin-top:auto;border-top:0.5px solid var(--border);padding:20px 0;font-family:var(--mono);font-size:11.5px;color:var(--dim);}
+footer a{color:var(--muted);text-decoration:none;}
+footer a:hover{color:var(--accent2);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:0.5px solid var(--border2);border-radius:12px;padding:12px 20px;font-family:var(--mono);font-size:12.5px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;}
+.toast.show{opacity:1;}
+.linkbox{font-family:var(--mono);font-size:12px;background:var(--bg3);border:0.5px solid var(--green-border);border-radius:10px;padding:12px 14px;margin-top:12px;color:var(--green);word-break:break-all;display:none;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Base<em>Sub</em></div>
+    <div class="hright">
+      <span class="pill">Base mainnet</span>
+      <span class="pill" id="balPill" style="display:none;"></span>
+      <button class="connect-btn primary" id="connBtn" onclick="connect()">Connect wallet</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Subscriptions that<br/><em>collect themselves.</em></h1>
+    <p>Non-custodial USDC subscriptions on Base. You approve once — each period is pulled from your wallet only when due, by an autonomous agent. No custody, no lockups, cancel anytime with one click.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="go('sub',this)">🔁 Subscribe</button>
+    <button class="tab-btn" onclick="go('link',this)">🔗 Subscribe-link</button>
+    <button class="tab-btn" onclick="go('mine',this)">📤 My subscriptions</button>
+    <button class="tab-btn" onclick="go('merch',this)">📥 My subscribers</button>
+    <button class="tab-btn" onclick="go('agent',this)">🤖 Billing Agent</button>
+  </div>
+
+  <!-- SUBSCRIBE -->
+  <div class="section active" id="sec-sub">
+    <div class="card">
+      <h2>🔁 Start a subscription</h2>
+      <label>Merchant / recipient address — who gets paid</label>
+      <input id="subTo" placeholder="0x…" spellcheck="false"/>
+      <label>Amount per period (USDC)</label>
+      <input id="subAmt" placeholder="10.00" inputmode="decimal"/>
+      <label>Billing period</label>
+      <div class="row" id="subIntervalRow" style="margin-top:6px;">
+        <button class="connect-btn" data-sec="300" onclick="pickInterval(this)">5 min (test)</button>
+        <button class="connect-btn" data-sec="86400" onclick="pickInterval(this)">Daily</button>
+        <button class="connect-btn" data-sec="604800" onclick="pickInterval(this)">Weekly</button>
+        <button class="connect-btn primary" data-sec="2592000" onclick="pickInterval(this)">Monthly</button>
+      </div>
+      <label>Label — shows in both parties' lists</label>
+      <input id="subLabel" placeholder="Pro plan / rent / DAO dues" maxlength="64"/>
+      <div class="row">
+        <button class="connect-btn primary" onclick="createSub()">Subscribe — first period charged now</button>
+      </div>
+      <div class="status" id="subStatus"></div>
+      <div class="hint">Funds never leave your wallet upfront. You approve USDC once; each period is pulled only when due. Cancel anytime — one click, on-chain.</div>
+    </div>
+  </div>
+
+  <!-- SUBSCRIBE-LINK -->
+  <div class="section" id="sec-link">
+    <div class="card">
+      <h2>🔗 Create a subscribe-link</h2>
+      <div class="hint" style="margin-bottom:10px;">You're the merchant. Fill the plan, share the link — anyone who opens it lands on a prefilled subscribe form. Your Netflix-style checkout, on Base.</div>
+      <label>Your address (gets paid)</label>
+      <input id="lnTo" placeholder="0x… (autofills on connect)" spellcheck="false"/>
+      <label>Amount per period (USDC)</label>
+      <input id="lnAmt" placeholder="5.00" inputmode="decimal"/>
+      <label>Billing period</label>
+      <div class="row" id="lnIntervalRow" style="margin-top:6px;">
+        <button class="connect-btn" data-sec="300" onclick="pickLnInterval(this)">5 min (test)</button>
+        <button class="connect-btn" data-sec="86400" onclick="pickLnInterval(this)">Daily</button>
+        <button class="connect-btn" data-sec="604800" onclick="pickLnInterval(this)">Weekly</button>
+        <button class="connect-btn primary" data-sec="2592000" onclick="pickLnInterval(this)">Monthly</button>
+      </div>
+      <label>Plan name</label>
+      <input id="lnLabel" placeholder="Pro plan" maxlength="64"/>
+      <div class="row">
+        <button class="connect-btn primary" onclick="makeSubLink()">Generate link</button>
+        <button class="connect-btn" onclick="copySubLink()" id="lnCopyBtn" style="display:none;">📋 Copy</button>
+      </div>
+      <div class="linkbox" id="lnBox"></div>
+    </div>
+  </div>
+
+  <!-- MY SUBSCRIPTIONS -->
+  <div class="section" id="sec-mine">
+    <div class="card">
+      <h2>📤 My subscriptions <span style="font-weight:400;font-size:12px;color:var(--muted)">(I pay)</span></h2>
+      <div id="mySubsList"><p class="empty">Connect & load to see subscriptions you're paying.</p></div>
+      <div class="row"><button class="connect-btn" onclick="loadSubs()">↻ Load</button></div>
+    </div>
+  </div>
+
+  <!-- MY SUBSCRIBERS -->
+  <div class="section" id="sec-merch">
+    <div class="card">
+      <h2>📥 My subscribers <span style="font-weight:400;font-size:12px;color:var(--muted)">(they pay me)</span></h2>
+      <div id="myMerchList"><p class="empty">Connect & load to see who's subscribed to you.</p></div>
+      <div class="row">
+        <button class="connect-btn" onclick="loadSubs()">↻ Load</button>
+        <button class="connect-btn primary" onclick="collectDue()">💰 Collect all due payments</button>
+        <button class="connect-btn" id="autoCollectBtn" onclick="toggleAutoCollect()">🤖 Auto-collector: OFF</button>
+      </div>
+      <div class="status" id="merchStatus"></div>
+      <div class="hint">Anyone can trigger a due charge — leave the auto-collector on and this page becomes your billing robot.</div>
+    </div>
+  </div>
+
+  <!-- BILLING AGENT -->
+  <div class="section" id="sec-agent">
+    <div class="card">
+      <h2>🤖 Billing agent — subscriptions collect themselves</h2>
+      <div class="hint" style="margin-bottom:14px;">A tiny on-chain worker with its own wallet, living in this page. While it's online, it watches BaseSub and charges every due subscription <b>by itself</b> — no wallet popup, no clicks, no human. Subscribers pay while everyone sleeps. Burner key stays in this browser.</div>
+      <div class="row" style="margin-top:0;align-items:center;">
+        <span class="pill" id="kpAddr" style="word-break:break-all;">—</span>
+        <span style="color:var(--muted);font-size:12px;">Gas balance: <b id="kpGas">—</b> · pays only tx fees (ETH); subscription money flows subscriber → merchant directly</span>
+      </div>
+      <div class="row">
+        <input id="kpFundAmt" placeholder="0.0005" inputmode="decimal" style="max-width:140px;"/>
+        <button class="connect-btn" onclick="kpFund()">⛽ Fund gas (ETH)</button>
+        <button class="connect-btn primary" onclick="kpStart()">▶ Start agent</button>
+        <button class="connect-btn" onclick="kpStop()">■ Stop</button>
+        <button class="connect-btn" onclick="kpSweep()">💸 Sweep gas back</button>
+        <button class="connect-btn" onclick="kpReset()">🗑 New key</button>
+      </div>
+      <div class="status" id="kpState" style="margin-top:12px;">agent offline</div>
+      <div id="kpTerm" style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.8;max-height:240px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;"><span style="color:var(--muted)">[boot]</span> Agent terminal ready. Fund gas, press Start, and leave this tab open.</div>
+      <div class="status" id="kpStatus"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    Built by <a href="https://x.com/Dnyelfy" target="_blank" rel="noreferrer">@Dnyelfy</a> · contract <a id="cLink" href="#" target="_blank" rel="noreferrer">BaseSub</a> · Base mainnet<br/>
+    Also live on Arc → <a href="https://arc-pay-black.vercel.app" target="_blank" rel="noreferrer">ArcPay</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+<script>
+/* ===== Base mainnet config ===== */
+const BASESUB = '0x959e55D41fA78747f69C3444b1d653068535083B'; // BaseSub — Base mainnet
+const USDC_ERC20 = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC (Base mainnet, 6 dec)
+const RPC = 'https://mainnet.base.org';
+const CHAIN_ID = 8453;
+const SCAN = 'https://basescan.org';
+
+const SUB_ABI = [
+  'function subscribe(address merchant, uint96 amount, uint32 interval, string label) returns (uint256)',
+  'function charge(uint256 id)',
+  'function chargeMany(uint256[] ids)',
+  'function cancel(uint256 id)',
+  'function nextId() view returns (uint256)',
+  'function listBySubscriber(address a) view returns (uint256[])',
+  'function listByMerchant(address a) view returns (uint256[])',
+  'function getSub(uint256 id) view returns (address subscriber, address merchant, uint96 amount, uint32 interval, uint40 nextChargeAt, bool active, string label)',
+  'event Charged(uint256 indexed id, address indexed merchant, uint96 amount, uint40 nextCharge)'
+];
+const ERC20_MIN_ABI = [
+  'function approve(address spender, uint256 amount) returns (bool)',
+  'function allowance(address owner, address spender) view returns (uint256)',
+  'function balanceOf(address) view returns (uint256)'
+];
+
+const $ = id => document.getElementById(id);
+const short = a => a ? a.slice(0,6) + '…' + a.slice(-4) : '';
+const escHtml = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let provider = null, signer = null, userAddress = null;
+const readProvider = new ethers.JsonRpcProvider(RPC, undefined, { batchMaxCount: 1 });
+
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function setStatus(id,msg,cls){ const el=$(id); el.className='status'+(cls?' '+cls:''); el.innerHTML=msg; }
+function validAddr(v){ try{ return ethers.getAddress(v.trim()); }catch{ return null; } }
+function go(name, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  $('sec-'+name).classList.add('active'); btn.classList.add('active');
+  if (name==='agent') kpInit();
+}
+
+async function connect(){
+  if(!window.ethereum){ toast('Wallet not found'); return; }
+  try{
+    provider = new ethers.BrowserProvider(window.ethereum);
+    const net = await provider.getNetwork();
+    if(Number(net.chainId) !== CHAIN_ID){
+      try{
+        await window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:'0x'+CHAIN_ID.toString(16) }] });
+      }catch(e){
+        if(e.code === 4902){
+          await window.ethereum.request({ method:'wallet_addEthereumChain', params:[{
+            chainId:'0x'+CHAIN_ID.toString(16), chainName:'Base',
+            nativeCurrency:{ name:'Ether', symbol:'ETH', decimals:18 },
+            rpcUrls:[RPC], blockExplorerUrls:[SCAN]
+          }]});
+        } else throw e;
+      }
+      provider = new ethers.BrowserProvider(window.ethereum);
+    }
+    signer = await provider.getSigner();
+    userAddress = await signer.getAddress();
+    $('connBtn').textContent = short(userAddress) + ' ✕';
+    $('connBtn').onclick = disconnect;
+    const usdc = new ethers.Contract(USDC_ERC20, ERC20_MIN_ABI, provider);
+    const bal = await usdc.balanceOf(userAddress);
+    $('balPill').textContent = Number(ethers.formatUnits(bal,6)).toFixed(2) + ' USDC';
+    $('balPill').style.display = '';
+    if (!$('lnTo').value) $('lnTo').value = userAddress;
+    toast('✓ Connected');
+  }catch(e){ toast('Connect failed: ' + (e.shortMessage||e.message||'').slice(0,60)); }
+}
+function disconnect(){
+  signer = null; userAddress = null;
+  $('connBtn').textContent = 'Connect wallet';
+  $('connBtn').onclick = connect;
+  $('balPill').style.display = 'none';
+  toast('Disconnected');
+}
+
+/* ===== intervals ===== */
+let subInterval = 2592000, lnInterval = 2592000;
+function pickInterval(btn){
+  document.querySelectorAll('#subIntervalRow .connect-btn').forEach(b=>b.classList.remove('primary'));
+  btn.classList.add('primary'); subInterval = parseInt(btn.dataset.sec);
+}
+function pickLnInterval(btn){
+  document.querySelectorAll('#lnIntervalRow .connect-btn').forEach(b=>b.classList.remove('primary'));
+  btn.classList.add('primary'); lnInterval = parseInt(btn.dataset.sec);
+}
+function intervalName(sec){
+  sec = Number(sec);
+  if (sec === 300) return '5 min';
+  if (sec === 86400) return 'daily';
+  if (sec === 604800) return 'weekly';
+  if (sec === 2592000) return 'monthly';
+  return sec + 's';
+}
+function subDue(s){ return s.active && (Date.now()/1000) >= Number(s.nextChargeAt); }
+function subLeft(s){
+  const left = Number(s.nextChargeAt) - Math.floor(Date.now()/1000);
+  if (left <= 0) return 'DUE NOW';
+  const d = Math.floor(left/86400), h = Math.floor(left%86400/3600), m = Math.floor(left%3600/60);
+  return d>0 ? `${d}d ${h}h` : h>0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+/* ===== subscribe-link ===== */
+let lastLink = '';
+function makeSubLink(){
+  const to = validAddr($('lnTo').value);
+  const amt = parseFloat($('lnAmt').value);
+  const label = $('lnLabel').value.trim() || 'subscription';
+  if (!to){ toast('Enter a valid address'); return; }
+  if (!amt || isNaN(amt)){ toast('Enter a valid amount'); return; }
+  const u = new URL(location.origin + location.pathname);
+  u.searchParams.set('to', to);
+  u.searchParams.set('amt', amt);
+  u.searchParams.set('int', lnInterval);
+  u.searchParams.set('label', label);
+  lastLink = u.toString();
+  $('lnBox').textContent = lastLink;
+  $('lnBox').style.display = 'block';
+  $('lnCopyBtn').style.display = '';
+}
+function copySubLink(){
+  navigator.clipboard.writeText(lastLink).then(()=>toast('✓ Link copied'));
+}
+function applyIncomingLink(){
+  const p = new URLSearchParams(location.search);
+  if (!p.get('to')) return;
+  const to = validAddr(p.get('to')); if(!to) return;
+  $('subTo').value = to;
+  if (p.get('amt')) $('subAmt').value = p.get('amt');
+  if (p.get('label')) $('subLabel').value = p.get('label').slice(0,64);
+  const int = parseInt(p.get('int'));
+  if (int){
+    subInterval = int;
+    document.querySelectorAll('#subIntervalRow .connect-btn').forEach(b=>{
+      b.classList.toggle('primary', parseInt(b.dataset.sec) === int);
+    });
+  }
+  toast('🔗 Subscribe-link loaded — review & confirm');
+}
+
+/* ===== subscribe / lists ===== */
+let merchSubsCache = [];
+let autoCollectTimer = null;
+
+async function ensureSubAllowance(minAmount){
+  const usdc = new ethers.Contract(USDC_ERC20, ERC20_MIN_ABI, signer);
+  const cur = await usdc.allowance(userAddress, BASESUB);
+  if (cur >= minAmount) return;
+  setStatus('subStatus','Approve USDC for recurring pulls…');
+  const tx = await usdc.approve(BASESUB, ethers.MaxUint256);
+  await tx.wait();
+}
+
+async function createSub(){
+  if (BASESUB.includes('DEPLOY')){ setStatus('subStatus','Contract not deployed yet.','err'); return; }
+  if (!signer){ await connect(); if(!signer) return; }
+  const to = validAddr($('subTo').value);
+  const amt = parseFloat($('subAmt').value);
+  const label = $('subLabel').value.trim() || 'subscription';
+  if (!to){ setStatus('subStatus','Enter a valid merchant address.','err'); return; }
+  if (!amt || isNaN(amt)){ setStatus('subStatus','Enter a valid amount.','err'); return; }
+  try{
+    const amount = ethers.parseUnits(amt.toFixed(6), 6);
+    await ensureSubAllowance(amount);
+    setStatus('subStatus','Confirm subscription — first period is charged now…');
+    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
+    const tx = await c.subscribe(to, amount, subInterval, label);
+    const rc = await tx.wait();
+    setStatus('subStatus',`✓ Subscribed — ${amt} USDC ${intervalName(subInterval)} · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
+    toast('✓ Subscription live');
+    loadSubs();
+  }catch(e){ setStatus('subStatus','Failed: '+(e.shortMessage||e.message||'').slice(0,90),'err'); }
+}
+
+async function fetchSubs(ids){
+  const c = new ethers.Contract(BASESUB, SUB_ABI, readProvider);
+  const out = [];
+  for (const id of ids){
+    try{
+      const s = await c.getSub(id);
+      out.push({ id: id.toString(), subscriber: s.subscriber, merchant: s.merchant,
+        amount: s.amount, interval: s.interval, nextChargeAt: s.nextChargeAt,
+        active: s.active, label: s.label });
+    }catch{}
+  }
+  return out;
+}
+
+function subRow(s, mine){
+  const amt = Number(ethers.formatUnits(s.amount,6)).toFixed(2);
+  const who = mine ? ('to ' + short(s.merchant)) : ('from ' + short(s.subscriber));
+  const state = !s.active ? '<span style="color:var(--muted)">cancelled</span>'
+    : subDue(s) ? '<span style="color:var(--amber)">DUE NOW</span>'
+    : '<span style="color:var(--green)">next in ' + subLeft(s) + '</span>';
+  const btn = !s.active ? ''
+    : mine ? `<button class="connect-btn" onclick="cancelSub('${s.id}')">Cancel</button>`
+    : subDue(s) ? `<button class="connect-btn primary" onclick="chargeSub('${s.id}')">Charge now</button>`
+                : `<button class="connect-btn" onclick="cancelSub('${s.id}')">Cancel</button>`;
+  return `<div class="receipt" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px;">
+    <div style="min-width:0;">
+      <b>${escHtml(s.label||'subscription')}</b> · ${amt} USDC / ${intervalName(s.interval)}<br/>
+      <span style="color:var(--muted);font-size:12px;">#${s.id} · ${who} · ${state}</span>
+    </div>
+    <div>${btn}</div>
+  </div>`;
+}
+
+async function loadSubs(){
+  if (BASESUB.includes('DEPLOY')){ toast('Contract not deployed yet'); return; }
+  if (!userAddress){ await connect(); if(!userAddress) return; }
+  const c = new ethers.Contract(BASESUB, SUB_ABI, readProvider);
+  try{
+    const [myIds, merchIds] = await Promise.all([
+      c.listBySubscriber(userAddress), c.listByMerchant(userAddress)
+    ]);
+    const mine = await fetchSubs(myIds);
+    merchSubsCache = await fetchSubs(merchIds);
+
+    $('mySubsList').innerHTML = mine.length
+      ? mine.map(s=>subRow(s,true)).join('')
+      : '<p class="empty">No subscriptions yet.</p>';
+
+    const activeMerch = merchSubsCache.filter(s=>s.active);
+    const monthly = activeMerch.reduce((t,s)=> t + Number(ethers.formatUnits(s.amount,6)) * (2592000/Number(s.interval)), 0);
+    $('myMerchList').innerHTML = (activeMerch.length
+      ? `<div class="hint" style="margin-bottom:10px;">Active subscribers: <b>${activeMerch.length}</b> · est. monthly revenue: <b>${monthly.toFixed(2)} USDC</b></div>`
+      : '') + (merchSubsCache.length
+      ? merchSubsCache.map(s=>subRow(s,false)).join('')
+      : '<p class="empty">Nobody subscribed to you yet. Share a subscribe-link 😎</p>');
+  }catch(e){ toast('Load failed: '+(e.shortMessage||e.message||'').slice(0,60)); }
+}
+
+async function chargeSub(id){
+  if (!signer){ await connect(); if(!signer) return; }
+  try{
+    setStatus('merchStatus','Confirm charge…');
+    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
+    const tx = await c.charge(id);
+    const rc = await tx.wait();
+    setStatus('merchStatus',`✓ Charged #${id} · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
+    toast('✓ Payment collected');
+    loadSubs();
+  }catch(e){ setStatus('merchStatus','Failed: '+(e.shortMessage||e.message||'').slice(0,90),'err'); }
+}
+
+async function cancelSub(id){
+  if (!signer){ await connect(); if(!signer) return; }
+  try{
+    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
+    const tx = await c.cancel(id);
+    await tx.wait();
+    toast('✓ Subscription cancelled');
+    loadSubs();
+  }catch(e){ toast('Cancel failed: '+(e.shortMessage||e.message||'').slice(0,60)); }
+}
+
+async function collectDue(){
+  if (!signer){ await connect(); if(!signer) return; }
+  await loadSubs();
+  const due = merchSubsCache.filter(subDue).map(s=>s.id);
+  if (!due.length){ setStatus('merchStatus','Nothing due right now.'); return; }
+  try{
+    setStatus('merchStatus',`Collecting ${due.length} due payment(s)…`);
+    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
+    const tx = await c.chargeMany(due);
+    const rc = await tx.wait();
+    setStatus('merchStatus',`✓ Collected ${due.length} payment(s) · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
+    toast('✓ All due payments collected');
+    loadSubs();
+  }catch(e){ setStatus('merchStatus','Failed: '+(e.shortMessage||e.message||'').slice(0,90),'err'); }
+}
+
+function toggleAutoCollect(){
+  if (autoCollectTimer){
+    clearInterval(autoCollectTimer); autoCollectTimer = null;
+    $('autoCollectBtn').textContent = '🤖 Auto-collector: OFF';
+    toast('Auto-collector stopped');
+  } else {
+    $('autoCollectBtn').textContent = '🤖 Auto-collector: ON';
+    toast('Auto-collector running — checks every 60s');
+    autoCollectTimer = setInterval(async ()=>{
+      if (!signer || BASESUB.includes('DEPLOY')) return;
+      try{
+        await loadSubs();
+        const due = merchSubsCache.filter(subDue).map(s=>s.id);
+        if (due.length){
+          const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
+          const tx = await c.chargeMany(due);
+          await tx.wait();
+          toast(`🤖 Auto-collected ${due.length} payment(s)`);
+          loadSubs();
+        }
+      }catch{}
+    }, 60000);
+  }
+}
+
+/* ===== Billing agent (BaseSub keeper, gas = ETH) ===== */
+const KP_KEY = 'baseSubKeeperKey_v1';
+const KP_ABI = [
+  'function nextId() view returns (uint256)',
+  'function charge(uint256 id)',
+  'function getSub(uint256 id) view returns (address subscriber, address merchant, uint96 amount, uint32 interval, uint40 nextChargeAt, bool active, string label)'
+];
+let kpWallet = null, kpTimer = null, kpBusy = false;
+
+function kpLog(m, cls){
+  const el = $('kpTerm');
+  const t = new Date().toLocaleTimeString('tr-TR');
+  const color = cls==='ok' ? 'var(--green)' : cls==='err' ? 'var(--red)' : cls==='warn' ? 'var(--amber)' : 'var(--muted)';
+  el.innerHTML += `\n<span style="color:var(--muted)">[${t}]</span> <span style="color:${color}">${m}</span>`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function kpInit(){
+  if (kpWallet) return;
+  let k = localStorage.getItem(KP_KEY);
+  if (!k){
+    k = ethers.Wallet.createRandom().privateKey;
+    localStorage.setItem(KP_KEY, k);
+    kpLog('🔑 New agent wallet generated (key stored in this browser only).','warn');
+  }
+  kpWallet = new ethers.Wallet(k, readProvider);
+  $('kpAddr').textContent = kpWallet.address;
+  kpBal();
+}
+
+async function kpBal(){
+  if (!kpWallet) return;
+  try{
+    const b = await readProvider.getBalance(kpWallet.address);
+    $('kpGas').textContent = Number(ethers.formatEther(b)).toFixed(6) + ' ETH';
+  }catch(_){}
+}
+
+async function kpTick(){
+  if (kpBusy || !kpWallet) return;
+  kpBusy = true;
+  try{
+    const c = new ethers.Contract(BASESUB, KP_ABI, kpWallet);
+    const maxId = Number(await c.nextId());
+    const now = Math.floor(Date.now()/1000);
+    for (let id = 1; id < Math.min(maxId, 200); id++){
+      let s; try{ s = await c.getSub(id); }catch{ continue; }
+      if (!s.active || now < Number(s.nextChargeAt)) continue;
+      kpLog(`🔁 Subscription #${id} ("${escHtml(s.label)}") is due — collecting ${ethers.formatUnits(s.amount,6)} USDC for ${short(s.merchant)}…`);
+      try{
+        const tx = await c.charge(id);
+        await tx.wait();
+        kpLog(`✓ #${id} charged autonomously — merchant paid, next cycle scheduled.`,'ok');
+      }catch(e){
+        kpLog(`#${id} charge failed: ` + (e.shortMessage||e.message||'').slice(0,70) + (String(e.message||'').includes('insufficient') ? ' — fund my gas!' : ''),'err');
+      }
+    }
+    kpBal();
+  }catch(e){ kpLog('tick error: ' + (e.shortMessage||e.message||'').slice(0,70),'err'); }
+  kpBusy = false;
+}
+
+function kpStart(){
+  if (BASESUB.includes('DEPLOY')){ toast('Contract not deployed yet'); return; }
+  kpInit();
+  if (kpTimer) return;
+  kpTimer = setInterval(kpTick, 15000);
+  kpTick();
+  $('kpState').textContent = '🟢 agent ONLINE — scanning BaseSub every 15s';
+  kpLog('▶ Agent started.','ok');
+}
+function kpStop(){
+  clearInterval(kpTimer); kpTimer = null;
+  $('kpState').textContent = 'agent offline';
+  kpLog('■ Agent stopped.');
+}
+
+async function kpFund(){
+  kpInit();
+  if (!signer){ await connect(); if(!signer) return; }
+  const amt = $('kpFundAmt').value || '0.0005';
+  try{
+    setStatus('kpStatus', `Confirm sending ${amt} ETH gas to the agent…`);
+    const tx = await signer.sendTransaction({ to: kpWallet.address, value: ethers.parseEther(amt) });
+    const rc = await tx.wait();
+    setStatus('kpStatus', `✓ Agent funded · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
+    kpBal();
+  }catch(e){ setStatus('kpStatus','Failed: '+(e.shortMessage||e.message||'').slice(0,80),'err'); }
+}
+
+async function kpSweep(){
+  kpInit();
+  if (!userAddress){ await connect(); if(!userAddress) return; }
+  try{
+    const bal = await readProvider.getBalance(kpWallet.address);
+    const keep = ethers.parseEther('0.0001');
+    if (bal <= keep){ setStatus('kpStatus','Nothing to sweep (keeping 0.0001 ETH for gas).'); return; }
+    const tx = await kpWallet.sendTransaction({ to: userAddress, value: bal - keep });
+    await tx.wait();
+    setStatus('kpStatus','✓ Gas swept back to your wallet.','ok');
+    kpLog('💸 Excess gas swept to owner.','ok');
+    kpBal();
+  }catch(e){ setStatus('kpStatus','Failed: '+(e.shortMessage||e.message||'').slice(0,80),'err'); }
+}
+
+function kpReset(){
+  if (!confirm('Generate a NEW agent key? Sweep gas back first!')) return;
+  localStorage.removeItem(KP_KEY);
+  kpWallet = null; kpStop(); kpInit();
+}
+
+/* ===== boot ===== */
+if (!BASESUB.includes('DEPLOY')) $('cLink').href = SCAN + '/address/' + BASESUB;
+applyIncomingLink();
+
+window.connect=connect; window.disconnect=disconnect; window.go=go;
+window.pickInterval=pickInterval; window.pickLnInterval=pickLnInterval;
+window.createSub=createSub; window.loadSubs=loadSubs; window.chargeSub=chargeSub;
+window.cancelSub=cancelSub; window.collectDue=collectDue; window.toggleAutoCollect=toggleAutoCollect;
+window.makeSubLink=makeSubLink; window.copySubLink=copySubLink;
+window.kpStart=kpStart; window.kpStop=kpStop; window.kpFund=kpFund; window.kpSweep=kpSweep; window.kpReset=kpReset;
+</script>
+</body>
+</html>
