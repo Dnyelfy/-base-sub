@@ -13,7 +13,7 @@
     "buttonTitle": "🔁 Open BaseSub",
     "splashImageUrl": "https://base-sub.vercel.app/splash.png",
     "splashBackgroundColor": "#ffffff",
-    "subtitle": "Subscriptions that collect themselves",
+    "subtitle": "Self-collecting subscriptions",
     "description": "Non-custodial USDC subscriptions on Base. Approve once, an autonomous agent pulls each period when due. Share a subscribe-link, get paid every cycle.",
     "primaryCategory": "finance",
     "tags": ["usdc", "subscriptions", "payments", "agent", "recurring"]
