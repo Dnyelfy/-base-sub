@@ -11,66 +11,77 @@
 <!-- Farcaster / Base mini app embed -->
 <meta name="fc:miniapp" content='{"version":"1","imageUrl":"https://base-sub.vercel.app/og.png","button":{"title":"🔁 Open BaseSub","action":{"type":"launch_miniapp","name":"BaseSub","url":"https://base-sub.vercel.app"}}}'/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#07080d;--bg2:#0e1017;--bg3:#141722;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#eef1f8;--muted:#7d84a0;--dim:#3c4258;
-  --accent:#0052ff;--accent2:#3d7bff;--accent-glow:rgba(0,82,255,0.22);
-  --green:#1de9b6;--green-bg:rgba(29,233,182,0.08);--green-border:rgba(29,233,182,0.25);
-  --amber:#ffc107;--amber-bg:rgba(255,193,7,0.08);
-  --red:#ff5252;--red-bg:rgba(255,82,82,0.08);
-  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef0f4;
+  --border:#e6e8ec;--border2:#d5d8df;
+  --text:#0a0b0d;--muted:#5b616e;--dim:#9199a5;
+  --blue:#0052ff;--blue-dark:#0043d3;--blue-bg:#eaf0ff;
+  --green:#098551;--green-bg:#e6f4ee;
+  --amber:#a36a00;--amber-bg:#fff3dd;
+  --red:#cf202f;--red-bg:#fdebec;
+  --font:'Inter',sans-serif;--mono:'Roboto Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{background:var(--bg);color:var(--text);font-family:var(--font);}
 body{min-height:100vh;display:flex;flex-direction:column;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
-.wrap{width:min(860px,92vw);margin:0 auto;position:relative;z-index:1;}
-header{padding:20px 0;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(7,8,13,0.88);backdrop-filter:blur(20px);z-index:100;}
+.wrap{width:min(820px,92vw);margin:0 auto;}
+header{padding:16px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);z-index:100;}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.logo{font-weight:800;font-size:20px;letter-spacing:-0.5px;}
-.logo em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
-.hright{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.pill{font-family:var(--mono);font-size:11.5px;padding:6px 12px;border:0.5px solid var(--border2);border-radius:99px;color:var(--muted);}
-.pill.gas{color:var(--green);border-color:var(--green-border);}
-.connect-btn{font-family:var(--font);font-weight:700;font-size:13px;padding:9px 16px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;transition:all .2s;}
-.connect-btn:hover{border-color:var(--accent);box-shadow:0 0 18px var(--accent-glow);}
-.connect-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;}
-.connect-btn:disabled{opacity:0.5;cursor:wait;}
-.hero{padding:42px 0 10px;}
-.hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.08;letter-spacing:-1px;}
-.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
-.hero p{color:var(--muted);font-size:14.5px;margin-top:12px;max-width:560px;line-height:1.6;}
-.tabs{display:flex;gap:4px;margin:28px 0 18px;border:0.5px solid var(--border);border-radius:14px;padding:4px;background:var(--bg2);width:fit-content;max-width:100%;overflow-x:auto;}
-.tab-btn{font-family:var(--font);font-weight:700;font-size:13px;padding:9px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .2s;}
-.tab-btn.active{background:var(--bg3);color:var(--text);box-shadow:inset 0 0 0 0.5px var(--border2);}
-.section{display:none;padding-bottom:50px;}
-.section.active{display:block;animation:fadein .25s ease;}
-@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;}
-.card h2{font-size:16px;font-weight:700;margin-bottom:14px;}
-label{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 6px;}
-input,textarea{width:100%;font-family:var(--mono);font-size:14px;padding:12px 14px;border-radius:10px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text);outline:none;transition:border .2s;}
-input:focus,textarea:focus{border-color:var(--accent);}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
-.hint{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px;line-height:1.6;}
+.logo{font-weight:800;font-size:19px;letter-spacing:-0.4px;display:flex;align-items:center;gap:8px;}
+.logo .dot{width:20px;height:20px;border-radius:50%;background:var(--blue);display:inline-block;}
+.logo em{font-style:normal;color:var(--blue);}
+.hright{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pill{font-family:var(--mono);font-size:11.5px;padding:6px 12px;border:1px solid var(--border);border-radius:99px;color:var(--muted);background:var(--bg2);}
+.pill.usdc{color:var(--green);background:var(--green-bg);border-color:transparent;}
+.btn{font-family:var(--font);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:99px;border:1px solid var(--border2);background:#fff;color:var(--text);cursor:pointer;transition:all .15s;}
+.btn:hover{border-color:var(--blue);color:var(--blue);}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.btn.primary:hover{background:var(--blue-dark);color:#fff;}
+.btn.ghost{border-color:transparent;background:var(--bg2);}
+.btn:disabled{opacity:0.5;cursor:wait;}
+.hero{padding:44px 0 8px;}
+.hero h1{font-size:clamp(30px,5vw,46px);font-weight:800;line-height:1.06;letter-spacing:-1.5px;}
+.hero h1 em{font-style:normal;color:var(--blue);}
+.hero p{color:var(--muted);font-size:15px;margin-top:14px;max-width:560px;line-height:1.65;}
+.tabs{display:flex;gap:2px;margin:30px 0 20px;background:var(--bg2);border-radius:12px;padding:4px;width:fit-content;max-width:100%;overflow-x:auto;}
+.tab-btn{font-family:var(--font);font-weight:600;font-size:13px;padding:9px 15px;border-radius:9px;border:none;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.tab-btn.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(10,11,13,0.08);}
+.section{display:none;padding-bottom:56px;}
+.section.active{display:block;animation:fadein .2s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:14px;box-shadow:0 1px 2px rgba(10,11,13,0.03);}
+.card h2{font-size:16px;font-weight:700;margin-bottom:4px;letter-spacing:-0.2px;}
+.card .sub{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.6;}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:16px 0 6px;}
+input{width:100%;font-family:var(--mono);font-size:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--border2);background:#fff;color:var(--text);outline:none;transition:border .15s, box-shadow .15s;}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg);}
+input::placeholder{color:var(--dim);}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.hint{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.6;}
 .status{font-family:var(--mono);font-size:12px;margin-top:12px;color:var(--muted);min-height:16px;word-break:break-all;}
 .status.ok{color:var(--green);}
 .status.err{color:var(--red);}
-.status a{color:var(--accent2);}
-.receipt{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:4px;padding:18px 20px;font-family:var(--mono);font-size:12.5px;position:relative;margin-top:14px;}
-.receipt::before,.receipt::after{content:'';position:absolute;left:0;right:0;height:8px;background-image:radial-gradient(circle at 8px 0px, var(--bg) 5px, transparent 5px);background-size:16px 8px;}
-.receipt::before{top:-1px;}
-.receipt::after{bottom:-1px;transform:rotate(180deg);}
-.empty{font-family:var(--mono);font-size:12.5px;color:var(--dim);padding:18px 0;text-align:center;}
-footer{margin-top:auto;border-top:0.5px solid var(--border);padding:20px 0;font-family:var(--mono);font-size:11.5px;color:var(--dim);}
+.status a{color:var(--blue);}
+.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:99px;}
+.chip.green{color:var(--green);background:var(--green-bg);}
+.chip.amber{color:var(--amber);background:var(--amber-bg);}
+.chip.gray{color:var(--muted);background:var(--bg3);}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--border);border-radius:12px;margin-top:10px;background:#fff;}
+.item .l b{font-size:14px;}
+.item .l .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:3px;}
+.empty{font-size:13px;color:var(--dim);padding:18px 0;text-align:center;}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.seg .btn{padding:8px 14px;font-size:12.5px;}
+.seg .btn.on{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);}
+footer{margin-top:auto;border-top:1px solid var(--border);padding:20px 0;font-size:12px;color:var(--dim);}
 footer a{color:var(--muted);text-decoration:none;}
-footer a:hover{color:var(--accent2);}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:0.5px solid var(--border2);border-radius:12px;padding:12px 20px;font-family:var(--mono);font-size:12.5px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;}
+footer a:hover{color:var(--blue);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;border-radius:12px;padding:12px 20px;font-size:13px;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;}
 .toast.show{opacity:1;}
-.linkbox{font-family:var(--mono);font-size:12px;background:var(--bg3);border:0.5px solid var(--green-border);border-radius:10px;padding:12px 14px;margin-top:12px;color:var(--green);word-break:break-all;display:none;}
+.linkbox{font-family:var(--mono);font-size:12px;background:var(--blue-bg);border:1px solid var(--blue);border-radius:10px;padding:12px 14px;margin-top:14px;color:var(--blue-dark);word-break:break-all;display:none;}
+.term{background:#0a0b0d;color:#c7ccd4;border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.8;max-height:240px;overflow-y:auto;white-space:pre-wrap;margin-top:14px;}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
@@ -78,11 +89,10 @@ footer a:hover{color:var(--accent2);}
 
 <header>
   <div class="wrap">
-    <div class="logo">Base<em>Sub</em></div>
+    <div class="logo"><span class="dot"></span>Base<em>Sub</em></div>
     <div class="hright">
-      <span class="pill">Base mainnet</span>
-      <span class="pill" id="balPill" style="display:none;"></span>
-      <button class="connect-btn primary" id="connBtn" onclick="connect()">Connect wallet</button>
+      <span class="pill usdc" id="balPill" style="display:none;"></span>
+      <button class="btn primary" id="connBtn" onclick="connect()">Connect wallet</button>
     </div>
   </div>
 </header>
@@ -90,36 +100,37 @@ footer a:hover{color:var(--accent2);}
 <div class="wrap">
   <div class="hero">
     <h1>Subscriptions that<br/><em>collect themselves.</em></h1>
-    <p>Non-custodial USDC subscriptions on Base. You approve once — each period is pulled from your wallet only when due, by an autonomous agent. No custody, no lockups, cancel anytime with one click.</p>
+    <p>Non-custodial USDC subscriptions on Base. Approve once — each period is pulled from your wallet only when due, by an autonomous agent. No custody, no lockups, cancel anytime. Basenames supported everywhere.</p>
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="go('sub',this)">🔁 Subscribe</button>
-    <button class="tab-btn" onclick="go('link',this)">🔗 Subscribe-link</button>
-    <button class="tab-btn" onclick="go('mine',this)">📤 My subscriptions</button>
-    <button class="tab-btn" onclick="go('merch',this)">📥 My subscribers</button>
-    <button class="tab-btn" onclick="go('agent',this)">🤖 Billing Agent</button>
+    <button class="tab-btn active" onclick="go('sub',this)">Subscribe</button>
+    <button class="tab-btn" onclick="go('link',this)">Subscribe-link</button>
+    <button class="tab-btn" onclick="go('mine',this)">My subscriptions</button>
+    <button class="tab-btn" onclick="go('merch',this)">My subscribers</button>
+    <button class="tab-btn" onclick="go('agent',this)">Billing Agent</button>
   </div>
 
   <!-- SUBSCRIBE -->
   <div class="section active" id="sec-sub">
     <div class="card">
-      <h2>🔁 Start a subscription</h2>
-      <label>Merchant / recipient address — who gets paid</label>
-      <input id="subTo" placeholder="0x…" spellcheck="false"/>
+      <h2>Start a subscription</h2>
+      <div class="sub">First period is charged now; every next one is pulled automatically when due.</div>
+      <label>Merchant — address or Basename (name.base.eth)</label>
+      <input id="subTo" placeholder="0x… or dnyelf.base.eth" spellcheck="false"/>
       <label>Amount per period (USDC)</label>
       <input id="subAmt" placeholder="10.00" inputmode="decimal"/>
       <label>Billing period</label>
-      <div class="row" id="subIntervalRow" style="margin-top:6px;">
-        <button class="connect-btn" data-sec="300" onclick="pickInterval(this)">5 min (test)</button>
-        <button class="connect-btn" data-sec="86400" onclick="pickInterval(this)">Daily</button>
-        <button class="connect-btn" data-sec="604800" onclick="pickInterval(this)">Weekly</button>
-        <button class="connect-btn primary" data-sec="2592000" onclick="pickInterval(this)">Monthly</button>
+      <div class="seg" id="subIntervalRow">
+        <button class="btn" data-sec="300" onclick="pickInterval(this)">5 min (test)</button>
+        <button class="btn" data-sec="86400" onclick="pickInterval(this)">Daily</button>
+        <button class="btn" data-sec="604800" onclick="pickInterval(this)">Weekly</button>
+        <button class="btn on" data-sec="2592000" onclick="pickInterval(this)">Monthly</button>
       </div>
       <label>Label — shows in both parties' lists</label>
       <input id="subLabel" placeholder="Pro plan / rent / DAO dues" maxlength="64"/>
       <div class="row">
-        <button class="connect-btn primary" onclick="createSub()">Subscribe — first period charged now</button>
+        <button class="btn primary" onclick="createSub()">Subscribe</button>
       </div>
       <div class="status" id="subStatus"></div>
       <div class="hint">Funds never leave your wallet upfront. You approve USDC once; each period is pulled only when due. Cancel anytime — one click, on-chain.</div>
@@ -129,24 +140,25 @@ footer a:hover{color:var(--accent2);}
   <!-- SUBSCRIBE-LINK -->
   <div class="section" id="sec-link">
     <div class="card">
-      <h2>🔗 Create a subscribe-link</h2>
-      <div class="hint" style="margin-bottom:10px;">You're the merchant. Fill the plan, share the link — anyone who opens it lands on a prefilled subscribe form. Your Netflix-style checkout, on Base.</div>
-      <label>Your address (gets paid)</label>
-      <input id="lnTo" placeholder="0x… (autofills on connect)" spellcheck="false"/>
+      <h2>Create a subscribe-link</h2>
+      <div class="sub">You're the merchant. Fill the plan, share the link — anyone who opens it lands on a prefilled subscribe form. Your Netflix-style checkout, on Base.</div>
+      <label>Your address or Basename (gets paid)</label>
+      <input id="lnTo" placeholder="0x… or name.base.eth (autofills on connect)" spellcheck="false"/>
       <label>Amount per period (USDC)</label>
       <input id="lnAmt" placeholder="5.00" inputmode="decimal"/>
       <label>Billing period</label>
-      <div class="row" id="lnIntervalRow" style="margin-top:6px;">
-        <button class="connect-btn" data-sec="300" onclick="pickLnInterval(this)">5 min (test)</button>
-        <button class="connect-btn" data-sec="86400" onclick="pickLnInterval(this)">Daily</button>
-        <button class="connect-btn" data-sec="604800" onclick="pickLnInterval(this)">Weekly</button>
-        <button class="connect-btn primary" data-sec="2592000" onclick="pickLnInterval(this)">Monthly</button>
+      <div class="seg" id="lnIntervalRow">
+        <button class="btn" data-sec="300" onclick="pickLnInterval(this)">5 min (test)</button>
+        <button class="btn" data-sec="86400" onclick="pickLnInterval(this)">Daily</button>
+        <button class="btn" data-sec="604800" onclick="pickLnInterval(this)">Weekly</button>
+        <button class="btn on" data-sec="2592000" onclick="pickLnInterval(this)">Monthly</button>
       </div>
       <label>Plan name</label>
       <input id="lnLabel" placeholder="Pro plan" maxlength="64"/>
       <div class="row">
-        <button class="connect-btn primary" onclick="makeSubLink()">Generate link</button>
-        <button class="connect-btn" onclick="copySubLink()" id="lnCopyBtn" style="display:none;">📋 Copy</button>
+        <button class="btn primary" onclick="makeSubLink()">Generate link</button>
+        <button class="btn" onclick="copySubLink()" id="lnCopyBtn" style="display:none;">📋 Copy</button>
+        <button class="btn" onclick="shareOnFarcaster()" id="lnCastBtn" style="display:none;">🟪 Share on Farcaster</button>
       </div>
       <div class="linkbox" id="lnBox"></div>
     </div>
@@ -155,21 +167,21 @@ footer a:hover{color:var(--accent2);}
   <!-- MY SUBSCRIPTIONS -->
   <div class="section" id="sec-mine">
     <div class="card">
-      <h2>📤 My subscriptions <span style="font-weight:400;font-size:12px;color:var(--muted)">(I pay)</span></h2>
-      <div id="mySubsList"><p class="empty">Connect & load to see subscriptions you're paying.</p></div>
-      <div class="row"><button class="connect-btn" onclick="loadSubs()">↻ Load</button></div>
+      <h2>My subscriptions <span style="font-weight:500;font-size:12px;color:var(--muted)">(I pay)</span></h2>
+      <div id="mySubsList"><p class="empty">Connect &amp; load to see subscriptions you're paying.</p></div>
+      <div class="row"><button class="btn ghost" onclick="loadSubs()">↻ Load</button></div>
     </div>
   </div>
 
   <!-- MY SUBSCRIBERS -->
   <div class="section" id="sec-merch">
     <div class="card">
-      <h2>📥 My subscribers <span style="font-weight:400;font-size:12px;color:var(--muted)">(they pay me)</span></h2>
-      <div id="myMerchList"><p class="empty">Connect & load to see who's subscribed to you.</p></div>
+      <h2>My subscribers <span style="font-weight:500;font-size:12px;color:var(--muted)">(they pay me)</span></h2>
+      <div id="myMerchList"><p class="empty">Connect &amp; load to see who's subscribed to you.</p></div>
       <div class="row">
-        <button class="connect-btn" onclick="loadSubs()">↻ Load</button>
-        <button class="connect-btn primary" onclick="collectDue()">💰 Collect all due payments</button>
-        <button class="connect-btn" id="autoCollectBtn" onclick="toggleAutoCollect()">🤖 Auto-collector: OFF</button>
+        <button class="btn ghost" onclick="loadSubs()">↻ Load</button>
+        <button class="btn primary" onclick="collectDue()">Collect all due</button>
+        <button class="btn" id="autoCollectBtn" onclick="toggleAutoCollect()">Auto-collector: OFF</button>
       </div>
       <div class="status" id="merchStatus"></div>
       <div class="hint">Anyone can trigger a due charge — leave the auto-collector on and this page becomes your billing robot.</div>
@@ -179,22 +191,22 @@ footer a:hover{color:var(--accent2);}
   <!-- BILLING AGENT -->
   <div class="section" id="sec-agent">
     <div class="card">
-      <h2>🤖 Billing agent — subscriptions collect themselves</h2>
-      <div class="hint" style="margin-bottom:14px;">A tiny on-chain worker with its own wallet, living in this page. While it's online, it watches BaseSub and charges every due subscription <b>by itself</b> — no wallet popup, no clicks, no human. Subscribers pay while everyone sleeps. Burner key stays in this browser.</div>
-      <div class="row" style="margin-top:0;align-items:center;">
+      <h2>Billing agent — subscriptions collect themselves</h2>
+      <div class="sub">A tiny on-chain worker with its own wallet, living in this page. While it's online, it watches BaseSub and charges every due subscription <b>by itself</b> — no wallet popup, no clicks, no human. Burner key stays in this browser.</div>
+      <div class="row" style="margin-top:8px;align-items:center;">
         <span class="pill" id="kpAddr" style="word-break:break-all;">—</span>
-        <span style="color:var(--muted);font-size:12px;">Gas balance: <b id="kpGas">—</b> · pays only tx fees (ETH); subscription money flows subscriber → merchant directly</span>
+        <span style="color:var(--muted);font-size:12px;">Gas: <b id="kpGas">—</b> · pays only tx fees (ETH); USDC flows subscriber → merchant directly</span>
       </div>
       <div class="row">
-        <input id="kpFundAmt" placeholder="0.0005" inputmode="decimal" style="max-width:140px;"/>
-        <button class="connect-btn" onclick="kpFund()">⛽ Fund gas (ETH)</button>
-        <button class="connect-btn primary" onclick="kpStart()">▶ Start agent</button>
-        <button class="connect-btn" onclick="kpStop()">■ Stop</button>
-        <button class="connect-btn" onclick="kpSweep()">💸 Sweep gas back</button>
-        <button class="connect-btn" onclick="kpReset()">🗑 New key</button>
+        <input id="kpFundAmt" placeholder="0.0005" inputmode="decimal" style="max-width:130px;"/>
+        <button class="btn" onclick="kpFund()">⛽ Fund gas</button>
+        <button class="btn primary" onclick="kpStart()">▶ Start agent</button>
+        <button class="btn" onclick="kpStop()">■ Stop</button>
+        <button class="btn ghost" onclick="kpSweep()">Sweep gas back</button>
+        <button class="btn ghost" onclick="kpReset()">New key</button>
       </div>
       <div class="status" id="kpState" style="margin-top:12px;">agent offline</div>
-      <div id="kpTerm" style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.8;max-height:240px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;"><span style="color:var(--muted)">[boot]</span> Agent terminal ready. Fund gas, press Start, and leave this tab open.</div>
+      <div class="term" id="kpTerm"><span style="color:#6b7280">[boot]</span> Agent terminal ready. Fund gas, press Start, and leave this tab open.</div>
       <div class="status" id="kpStatus"></div>
     </div>
   </div>
@@ -203,8 +215,8 @@ footer a:hover{color:var(--accent2);}
 
 <footer>
   <div class="wrap">
-    Built by <a href="https://x.com/Dnyelfy" target="_blank" rel="noreferrer">@Dnyelfy</a> · contract <a id="cLink" href="#" target="_blank" rel="noreferrer">BaseSub</a> · Base mainnet<br/>
-    Also live on Arc → <a href="https://arc-pay-black.vercel.app" target="_blank" rel="noreferrer">ArcPay</a>
+    Built by <a href="https://x.com/Dnyelfy" target="_blank" rel="noreferrer">@Dnyelfy</a> · <a id="cLink" href="#" target="_blank" rel="noreferrer">contract ↗</a> · Base mainnet · ERC-8021 attributed<br/>
+    Same protocol, other chain → <a href="https://arc-pay-black.vercel.app" target="_blank" rel="noreferrer">ArcPay on Arc</a>
   </div>
 </footer>
 
@@ -213,11 +225,23 @@ footer a:hover{color:var(--accent2);}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
 <script>
 /* ===== Base mainnet config ===== */
-const BASESUB = '0x959e55D41fA78747f69C3444b1d653068535083B'; // BaseSub — Base mainnet
+const BASESUB = '0x959e55D41fA78747f69C3444b1d653068535083B';
 const USDC_ERC20 = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC (Base mainnet, 6 dec)
 const RPC = 'https://mainnet.base.org';
 const CHAIN_ID = 8453;
 const SCAN = 'https://basescan.org';
+const APP_URL = 'https://base-sub.vercel.app';
+
+/* ===== ERC-8021 Builder Code (base.dev → Settings → Builder Code) ===== */
+const BUILDER_CODE = ''; // ← base.dev'den aldığın kodu yaz (örn 'basesub'); boşsa suffix eklenmez
+function buildSuffix(){
+  if (!BUILDER_CODE) return '';
+  const codeHex = Array.from(new TextEncoder().encode(BUILDER_CODE)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const len = (codeHex.length/2).toString(16).padStart(2,'0');
+  return len + codeHex + '00' + '80218021802180218021802180218021';
+}
+const SUFFIX = buildSuffix();
+const withCode = data => SUFFIX ? data + SUFFIX : data;
 
 const SUB_ABI = [
   'function subscribe(address merchant, uint96 amount, uint32 interval, string label) returns (uint256)',
@@ -227,14 +251,15 @@ const SUB_ABI = [
   'function nextId() view returns (uint256)',
   'function listBySubscriber(address a) view returns (uint256[])',
   'function listByMerchant(address a) view returns (uint256[])',
-  'function getSub(uint256 id) view returns (address subscriber, address merchant, uint96 amount, uint32 interval, uint40 nextChargeAt, bool active, string label)',
-  'event Charged(uint256 indexed id, address indexed merchant, uint96 amount, uint40 nextCharge)'
+  'function getSub(uint256 id) view returns (address subscriber, address merchant, uint96 amount, uint32 interval, uint40 nextChargeAt, bool active, string label)'
 ];
 const ERC20_MIN_ABI = [
   'function approve(address spender, uint256 amount) returns (bool)',
   'function allowance(address owner, address spender) view returns (uint256)',
   'function balanceOf(address) view returns (uint256)'
 ];
+const subIface = new ethers.Interface(SUB_ABI);
+const erc20Iface = new ethers.Interface(ERC20_MIN_ABI);
 
 const $ = id => document.getElementById(id);
 const short = a => a ? a.slice(0,6) + '…' + a.slice(-4) : '';
@@ -244,12 +269,46 @@ const readProvider = new ethers.JsonRpcProvider(RPC, undefined, { batchMaxCount:
 
 function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 function setStatus(id,msg,cls){ const el=$(id); el.className='status'+(cls?' '+cls:''); el.innerHTML=msg; }
-function validAddr(v){ try{ return ethers.getAddress(v.trim()); }catch{ return null; } }
 function go(name, btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   $('sec-'+name).classList.add('active'); btn.classList.add('active');
   if (name==='agent') kpInit();
+}
+
+/* ===== Basenames (L2Resolver on Base) ===== */
+const L2_RESOLVER = '0xC6d566A56A1aFf6508b41f6c90ff131615583BCD';
+const RESOLVER_ABI = [
+  'function addr(bytes32 node) view returns (address)',
+  'function name(bytes32 node) view returns (string)'
+];
+const resolver = new ethers.Contract(L2_RESOLVER, RESOLVER_ABI, readProvider);
+const nameCache = {};
+
+async function resolveInput(v){
+  v = (v||'').trim();
+  if (!v) return null;
+  if (/^0x[0-9a-fA-F]{40}$/.test(v)){ try{ return ethers.getAddress(v); }catch{ return null; } }
+  if (v.toLowerCase().endsWith('.base.eth')){
+    try{
+      const a = await resolver.addr(ethers.namehash(v.toLowerCase()));
+      if (a && a !== ethers.ZeroAddress) return a;
+    }catch{}
+    return null;
+  }
+  return null;
+}
+async function displayName(addr){
+  const key = addr.toLowerCase();
+  if (nameCache[key] !== undefined) return nameCache[key];
+  let out = short(addr);
+  try{
+    const node = ethers.namehash(key.slice(2) + '.80002105.reverse');
+    const n = await resolver.name(node);
+    if (n) out = n;
+  }catch{}
+  nameCache[key] = out;
+  return out;
 }
 
 async function connect(){
@@ -274,6 +333,7 @@ async function connect(){
     signer = await provider.getSigner();
     userAddress = await signer.getAddress();
     $('connBtn').textContent = short(userAddress) + ' ✕';
+    displayName(userAddress).then(n=>{ if(signer) $('connBtn').textContent = n + ' ✕'; });
     $('connBtn').onclick = disconnect;
     const usdc = new ethers.Contract(USDC_ERC20, ERC20_MIN_ABI, provider);
     const bal = await usdc.balanceOf(userAddress);
@@ -294,12 +354,12 @@ function disconnect(){
 /* ===== intervals ===== */
 let subInterval = 2592000, lnInterval = 2592000;
 function pickInterval(btn){
-  document.querySelectorAll('#subIntervalRow .connect-btn').forEach(b=>b.classList.remove('primary'));
-  btn.classList.add('primary'); subInterval = parseInt(btn.dataset.sec);
+  document.querySelectorAll('#subIntervalRow .btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); subInterval = parseInt(btn.dataset.sec);
 }
 function pickLnInterval(btn){
-  document.querySelectorAll('#lnIntervalRow .connect-btn').forEach(b=>b.classList.remove('primary'));
-  btn.classList.add('primary'); lnInterval = parseInt(btn.dataset.sec);
+  document.querySelectorAll('#lnIntervalRow .btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); lnInterval = parseInt(btn.dataset.sec);
 }
 function intervalName(sec){
   sec = Number(sec);
@@ -317,42 +377,55 @@ function subLeft(s){
   return d>0 ? `${d}d ${h}h` : h>0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-/* ===== subscribe-link ===== */
-let lastLink = '';
-function makeSubLink(){
-  const to = validAddr($('lnTo').value);
+/* ===== subscribe-link + Farcaster share ===== */
+let lastLink = '', lastPlan = null;
+async function makeSubLink(){
+  const to = await resolveInput($('lnTo').value);
   const amt = parseFloat($('lnAmt').value);
   const label = $('lnLabel').value.trim() || 'subscription';
-  if (!to){ toast('Enter a valid address'); return; }
+  if (!to){ toast('Enter a valid address or Basename'); return; }
   if (!amt || isNaN(amt)){ toast('Enter a valid amount'); return; }
-  const u = new URL(location.origin + location.pathname);
+  const u = new URL(APP_URL);
   u.searchParams.set('to', to);
   u.searchParams.set('amt', amt);
   u.searchParams.set('int', lnInterval);
   u.searchParams.set('label', label);
   lastLink = u.toString();
+  lastPlan = { amt, label, interval: lnInterval };
   $('lnBox').textContent = lastLink;
   $('lnBox').style.display = 'block';
   $('lnCopyBtn').style.display = '';
+  $('lnCastBtn').style.display = '';
 }
 function copySubLink(){
   navigator.clipboard.writeText(lastLink).then(()=>toast('✓ Link copied'));
 }
+function shareOnFarcaster(){
+  if (!lastLink || !lastPlan) return;
+  const text = `Subscribe to "${lastPlan.label}" — ${lastPlan.amt} USDC ${intervalName(lastPlan.interval)}, non-custodial, on Base 🔵\n\nOne approve, cancel anytime →`;
+  const url = 'https://farcaster.xyz/~/compose?text=' + encodeURIComponent(text) + '&embeds[]=' + encodeURIComponent(lastLink);
+  window.open(url, '_blank');
+}
 function applyIncomingLink(){
   const p = new URLSearchParams(location.search);
   if (!p.get('to')) return;
-  const to = validAddr(p.get('to')); if(!to) return;
-  $('subTo').value = to;
+  try{ $('subTo').value = ethers.getAddress(p.get('to')); }catch{ return; }
   if (p.get('amt')) $('subAmt').value = p.get('amt');
   if (p.get('label')) $('subLabel').value = p.get('label').slice(0,64);
   const int = parseInt(p.get('int'));
   if (int){
     subInterval = int;
-    document.querySelectorAll('#subIntervalRow .connect-btn').forEach(b=>{
-      b.classList.toggle('primary', parseInt(b.dataset.sec) === int);
+    document.querySelectorAll('#subIntervalRow .btn').forEach(b=>{
+      b.classList.toggle('on', parseInt(b.dataset.sec) === int);
     });
   }
   toast('🔗 Subscribe-link loaded — review & confirm');
+}
+
+/* ===== tx helper: send with ERC-8021 suffix ===== */
+async function sendAttributed(to, data){
+  const tx = await signer.sendTransaction({ to, data: withCode(data) });
+  return tx.wait();
 }
 
 /* ===== subscribe / lists ===== */
@@ -360,29 +433,26 @@ let merchSubsCache = [];
 let autoCollectTimer = null;
 
 async function ensureSubAllowance(minAmount){
-  const usdc = new ethers.Contract(USDC_ERC20, ERC20_MIN_ABI, signer);
+  const usdc = new ethers.Contract(USDC_ERC20, ERC20_MIN_ABI, readProvider);
   const cur = await usdc.allowance(userAddress, BASESUB);
   if (cur >= minAmount) return;
   setStatus('subStatus','Approve USDC for recurring pulls…');
-  const tx = await usdc.approve(BASESUB, ethers.MaxUint256);
-  await tx.wait();
+  await sendAttributed(USDC_ERC20, erc20Iface.encodeFunctionData('approve',[BASESUB, ethers.MaxUint256]));
 }
 
 async function createSub(){
-  if (BASESUB.includes('DEPLOY')){ setStatus('subStatus','Contract not deployed yet.','err'); return; }
   if (!signer){ await connect(); if(!signer) return; }
-  const to = validAddr($('subTo').value);
+  setStatus('subStatus','Resolving…');
+  const to = await resolveInput($('subTo').value);
   const amt = parseFloat($('subAmt').value);
   const label = $('subLabel').value.trim() || 'subscription';
-  if (!to){ setStatus('subStatus','Enter a valid merchant address.','err'); return; }
+  if (!to){ setStatus('subStatus','Enter a valid merchant address or Basename.','err'); return; }
   if (!amt || isNaN(amt)){ setStatus('subStatus','Enter a valid amount.','err'); return; }
   try{
     const amount = ethers.parseUnits(amt.toFixed(6), 6);
     await ensureSubAllowance(amount);
     setStatus('subStatus','Confirm subscription — first period is charged now…');
-    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
-    const tx = await c.subscribe(to, amount, subInterval, label);
-    const rc = await tx.wait();
+    const rc = await sendAttributed(BASESUB, subIface.encodeFunctionData('subscribe',[to, amount, subInterval, label]));
     setStatus('subStatus',`✓ Subscribed — ${amt} USDC ${intervalName(subInterval)} · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
     toast('✓ Subscription live');
     loadSubs();
@@ -397,7 +467,9 @@ async function fetchSubs(ids){
       const s = await c.getSub(id);
       out.push({ id: id.toString(), subscriber: s.subscriber, merchant: s.merchant,
         amount: s.amount, interval: s.interval, nextChargeAt: s.nextChargeAt,
-        active: s.active, label: s.label });
+        active: s.active, label: s.label,
+        subscriberName: await displayName(s.subscriber),
+        merchantName: await displayName(s.merchant) });
     }catch{}
   }
   return out;
@@ -405,25 +477,24 @@ async function fetchSubs(ids){
 
 function subRow(s, mine){
   const amt = Number(ethers.formatUnits(s.amount,6)).toFixed(2);
-  const who = mine ? ('to ' + short(s.merchant)) : ('from ' + short(s.subscriber));
-  const state = !s.active ? '<span style="color:var(--muted)">cancelled</span>'
-    : subDue(s) ? '<span style="color:var(--amber)">DUE NOW</span>'
-    : '<span style="color:var(--green)">next in ' + subLeft(s) + '</span>';
+  const who = mine ? ('to ' + escHtml(s.merchantName)) : ('from ' + escHtml(s.subscriberName));
+  const state = !s.active ? '<span class="chip gray">cancelled</span>'
+    : subDue(s) ? '<span class="chip amber">DUE NOW</span>'
+    : '<span class="chip green">next in ' + subLeft(s) + '</span>';
   const btn = !s.active ? ''
-    : mine ? `<button class="connect-btn" onclick="cancelSub('${s.id}')">Cancel</button>`
-    : subDue(s) ? `<button class="connect-btn primary" onclick="chargeSub('${s.id}')">Charge now</button>`
-                : `<button class="connect-btn" onclick="cancelSub('${s.id}')">Cancel</button>`;
-  return `<div class="receipt" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px;">
-    <div style="min-width:0;">
-      <b>${escHtml(s.label||'subscription')}</b> · ${amt} USDC / ${intervalName(s.interval)}<br/>
-      <span style="color:var(--muted);font-size:12px;">#${s.id} · ${who} · ${state}</span>
+    : mine ? `<button class="btn ghost" onclick="cancelSub('${s.id}')">Cancel</button>`
+    : subDue(s) ? `<button class="btn primary" onclick="chargeSub('${s.id}')">Charge now</button>`
+                : `<button class="btn ghost" onclick="cancelSub('${s.id}')">Cancel</button>`;
+  return `<div class="item">
+    <div class="l">
+      <b>${escHtml(s.label||'subscription')}</b> · ${amt} USDC / ${intervalName(s.interval)}
+      <div class="meta">#${s.id} · ${who}</div>
     </div>
-    <div>${btn}</div>
+    <div style="display:flex;align-items:center;gap:8px;">${state}${btn}</div>
   </div>`;
 }
 
 async function loadSubs(){
-  if (BASESUB.includes('DEPLOY')){ toast('Contract not deployed yet'); return; }
   if (!userAddress){ await connect(); if(!userAddress) return; }
   const c = new ethers.Contract(BASESUB, SUB_ABI, readProvider);
   try{
@@ -440,7 +511,7 @@ async function loadSubs(){
     const activeMerch = merchSubsCache.filter(s=>s.active);
     const monthly = activeMerch.reduce((t,s)=> t + Number(ethers.formatUnits(s.amount,6)) * (2592000/Number(s.interval)), 0);
     $('myMerchList').innerHTML = (activeMerch.length
-      ? `<div class="hint" style="margin-bottom:10px;">Active subscribers: <b>${activeMerch.length}</b> · est. monthly revenue: <b>${monthly.toFixed(2)} USDC</b></div>`
+      ? `<div class="hint" style="margin-top:0;margin-bottom:4px;">Active subscribers: <b>${activeMerch.length}</b> · est. monthly revenue: <b>${monthly.toFixed(2)} USDC</b></div>`
       : '') + (merchSubsCache.length
       ? merchSubsCache.map(s=>subRow(s,false)).join('')
       : '<p class="empty">Nobody subscribed to you yet. Share a subscribe-link 😎</p>');
@@ -451,9 +522,7 @@ async function chargeSub(id){
   if (!signer){ await connect(); if(!signer) return; }
   try{
     setStatus('merchStatus','Confirm charge…');
-    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
-    const tx = await c.charge(id);
-    const rc = await tx.wait();
+    const rc = await sendAttributed(BASESUB, subIface.encodeFunctionData('charge',[id]));
     setStatus('merchStatus',`✓ Charged #${id} · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
     toast('✓ Payment collected');
     loadSubs();
@@ -463,9 +532,7 @@ async function chargeSub(id){
 async function cancelSub(id){
   if (!signer){ await connect(); if(!signer) return; }
   try{
-    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
-    const tx = await c.cancel(id);
-    await tx.wait();
+    await sendAttributed(BASESUB, subIface.encodeFunctionData('cancel',[id]));
     toast('✓ Subscription cancelled');
     loadSubs();
   }catch(e){ toast('Cancel failed: '+(e.shortMessage||e.message||'').slice(0,60)); }
@@ -478,9 +545,7 @@ async function collectDue(){
   if (!due.length){ setStatus('merchStatus','Nothing due right now.'); return; }
   try{
     setStatus('merchStatus',`Collecting ${due.length} due payment(s)…`);
-    const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
-    const tx = await c.chargeMany(due);
-    const rc = await tx.wait();
+    const rc = await sendAttributed(BASESUB, subIface.encodeFunctionData('chargeMany',[due]));
     setStatus('merchStatus',`✓ Collected ${due.length} payment(s) · <a href="${SCAN}/tx/${rc.hash}" target="_blank" rel="noreferrer">tx ↗</a>`,'ok');
     toast('✓ All due payments collected');
     loadSubs();
@@ -490,20 +555,18 @@ async function collectDue(){
 function toggleAutoCollect(){
   if (autoCollectTimer){
     clearInterval(autoCollectTimer); autoCollectTimer = null;
-    $('autoCollectBtn').textContent = '🤖 Auto-collector: OFF';
+    $('autoCollectBtn').textContent = 'Auto-collector: OFF';
     toast('Auto-collector stopped');
   } else {
-    $('autoCollectBtn').textContent = '🤖 Auto-collector: ON';
+    $('autoCollectBtn').textContent = 'Auto-collector: ON';
     toast('Auto-collector running — checks every 60s');
     autoCollectTimer = setInterval(async ()=>{
-      if (!signer || BASESUB.includes('DEPLOY')) return;
+      if (!signer) return;
       try{
         await loadSubs();
         const due = merchSubsCache.filter(subDue).map(s=>s.id);
         if (due.length){
-          const c = new ethers.Contract(BASESUB, SUB_ABI, signer);
-          const tx = await c.chargeMany(due);
-          await tx.wait();
+          await sendAttributed(BASESUB, subIface.encodeFunctionData('chargeMany',[due]));
           toast(`🤖 Auto-collected ${due.length} payment(s)`);
           loadSubs();
         }
@@ -514,18 +577,13 @@ function toggleAutoCollect(){
 
 /* ===== Billing agent (BaseSub keeper, gas = ETH) ===== */
 const KP_KEY = 'baseSubKeeperKey_v1';
-const KP_ABI = [
-  'function nextId() view returns (uint256)',
-  'function charge(uint256 id)',
-  'function getSub(uint256 id) view returns (address subscriber, address merchant, uint96 amount, uint32 interval, uint40 nextChargeAt, bool active, string label)'
-];
 let kpWallet = null, kpTimer = null, kpBusy = false;
 
 function kpLog(m, cls){
   const el = $('kpTerm');
   const t = new Date().toLocaleTimeString('tr-TR');
-  const color = cls==='ok' ? 'var(--green)' : cls==='err' ? 'var(--red)' : cls==='warn' ? 'var(--amber)' : 'var(--muted)';
-  el.innerHTML += `\n<span style="color:var(--muted)">[${t}]</span> <span style="color:${color}">${m}</span>`;
+  const color = cls==='ok' ? '#34d399' : cls==='err' ? '#f87171' : cls==='warn' ? '#fbbf24' : '#9ca3af';
+  el.innerHTML += `\n<span style="color:#6b7280">[${t}]</span> <span style="color:${color}">${m}</span>`;
   el.scrollTop = el.scrollHeight;
 }
 
@@ -554,7 +612,7 @@ async function kpTick(){
   if (kpBusy || !kpWallet) return;
   kpBusy = true;
   try{
-    const c = new ethers.Contract(BASESUB, KP_ABI, kpWallet);
+    const c = new ethers.Contract(BASESUB, SUB_ABI, kpWallet);
     const maxId = Number(await c.nextId());
     const now = Math.floor(Date.now()/1000);
     for (let id = 1; id < Math.min(maxId, 200); id++){
@@ -562,7 +620,7 @@ async function kpTick(){
       if (!s.active || now < Number(s.nextChargeAt)) continue;
       kpLog(`🔁 Subscription #${id} ("${escHtml(s.label)}") is due — collecting ${ethers.formatUnits(s.amount,6)} USDC for ${short(s.merchant)}…`);
       try{
-        const tx = await c.charge(id);
+        const tx = await kpWallet.sendTransaction({ to: BASESUB, data: withCode(subIface.encodeFunctionData('charge',[id])) });
         await tx.wait();
         kpLog(`✓ #${id} charged autonomously — merchant paid, next cycle scheduled.`,'ok');
       }catch(e){
@@ -575,7 +633,6 @@ async function kpTick(){
 }
 
 function kpStart(){
-  if (BASESUB.includes('DEPLOY')){ toast('Contract not deployed yet'); return; }
   kpInit();
   if (kpTimer) return;
   kpTimer = setInterval(kpTick, 15000);
@@ -624,14 +681,14 @@ function kpReset(){
 }
 
 /* ===== boot ===== */
-if (!BASESUB.includes('DEPLOY')) $('cLink').href = SCAN + '/address/' + BASESUB;
+$('cLink').href = SCAN + '/address/' + BASESUB;
 applyIncomingLink();
 
 window.connect=connect; window.disconnect=disconnect; window.go=go;
 window.pickInterval=pickInterval; window.pickLnInterval=pickLnInterval;
 window.createSub=createSub; window.loadSubs=loadSubs; window.chargeSub=chargeSub;
 window.cancelSub=cancelSub; window.collectDue=collectDue; window.toggleAutoCollect=toggleAutoCollect;
-window.makeSubLink=makeSubLink; window.copySubLink=copySubLink;
+window.makeSubLink=makeSubLink; window.copySubLink=copySubLink; window.shareOnFarcaster=shareOnFarcaster;
 window.kpStart=kpStart; window.kpStop=kpStop; window.kpFund=kpFund; window.kpSweep=kpSweep; window.kpReset=kpReset;
 </script>
 </body>
