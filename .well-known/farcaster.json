@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "PASTE_FROM_MANIFEST_TOOL",
-    "payload": "PASTE_FROM_MANIFEST_TOOL",
-    "signature": "PASTE_FROM_MANIFEST_TOOL"
+    "header": "eyJmaWQiOjEwNzQzODMsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgyN2IzMjJCZTM2NTliOTJDMjZCNWU0Mjk0YTE0NjY5MTJCZmQ2ZTk4In0",
+    "payload": "eyJkb21haW4iOiJiYXNlLXN1Yi52ZXJjZWwuYXBwIn0",
+    "signature": "VBJXm3aUYYzBP/K7VEcTkL9G+rl1drr9fHAoBDT7OU9LTITNJljLtF+eWGLlzvFVRULEDYgBnzz8i91NsMZbRxw="
   },
   "miniapp": {
     "version": "1",
@@ -16,6 +16,12 @@
     "subtitle": "Self-collecting subscriptions",
     "description": "Non-custodial USDC subscriptions on Base. Approve once, an autonomous agent pulls each period when due. Share a subscribe-link, get paid every cycle.",
     "primaryCategory": "finance",
-    "tags": ["usdc", "subscriptions", "payments", "agent", "recurring"]
+    "tags": [
+      "usdc",
+      "subscriptions",
+      "payments",
+      "agent",
+      "recurring"
+    ]
   }
 }
