@@ -1,0 +1,21 @@
+{
+  "accountAssociation": {
+    "header": "PASTE_FROM_MANIFEST_TOOL",
+    "payload": "PASTE_FROM_MANIFEST_TOOL",
+    "signature": "PASTE_FROM_MANIFEST_TOOL"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "BaseSub",
+    "homeUrl": "https://base-sub.vercel.app",
+    "iconUrl": "https://base-sub.vercel.app/icon.png",
+    "imageUrl": "https://base-sub.vercel.app/og.png",
+    "buttonTitle": "🔁 Open BaseSub",
+    "splashImageUrl": "https://base-sub.vercel.app/splash.png",
+    "splashBackgroundColor": "#ffffff",
+    "subtitle": "Subscriptions that collect themselves",
+    "description": "Non-custodial USDC subscriptions on Base. Approve once, an autonomous agent pulls each period when due. Share a subscribe-link, get paid every cycle.",
+    "primaryCategory": "finance",
+    "tags": ["usdc", "subscriptions", "payments", "agent", "recurring"]
+  }
+}
